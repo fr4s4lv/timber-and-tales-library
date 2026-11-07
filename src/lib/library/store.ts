@@ -45,6 +45,10 @@ export function useLibrary() {
   return snap;
 }
 
+export function getLibrarySnapshot() {
+  return state;
+}
+
 export function getBookSync(id: string) {
   return state.books.find((b) => b.id === id);
 }

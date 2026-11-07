@@ -2,7 +2,7 @@
 import { unzip } from "fflate";
 import { putBookFile, putCover } from "./db";
 import { detectFormat, storedFileName, type SupportedFormat } from "./formats";
-import { addBookMeta, getLibrarySnapshot } from "./store-access";
+import { addBookMeta, getLibrarySnapshot, initLibrary } from "./store";
 import type { BookMeta } from "./types";
 
 export interface ImportOutcome {
@@ -180,6 +180,7 @@ export async function importFiles(
   files: File[],
   onProgress?: (done: number, total: number, name: string) => void,
 ): Promise<ImportOutcome> {
+  await initLibrary();
   const outcome: ImportOutcome = { imported: [], failed: [] };
   let done = 0;
   for (const file of files) {

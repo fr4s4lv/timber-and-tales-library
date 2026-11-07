@@ -1091,3 +1091,12 @@ foliate-view {
 .safe-bottom {
   padding-bottom: env(safe-area-inset-bottom);
 }
+
+/* fallback leather covers */
+.cover-0 { --cover-bg: oklch(0.36 0.12 28); --cover-fg: var(--gilt); }
+.cover-1 { --cover-bg: oklch(0.3 0.07 255); --cover-fg: var(--gilt); }
+.cover-2 { --cover-bg: oklch(0.34 0.07 155); --cover-fg: var(--gilt); }
+.cover-3 { --cover-bg: oklch(0.62 0.11 75); --cover-fg: oklch(0.22 0.04 55); }
+.cover-4 { --cover-bg: oklch(0.32 0.08 340); --cover-fg: var(--gilt); }
+.cover-5 { --cover-bg: oklch(0.88 0.03 85); --cover-fg: oklch(0.3 0.05 40); }
+.cover-6 { --cover-bg: oklch(0.25 0.02 50); --cover-fg: var(--gilt); }

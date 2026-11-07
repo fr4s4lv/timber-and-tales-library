@@ -52,7 +52,7 @@ export function BookCover({ book, editing, onOpen, onToggleFavorite, onDelete }:
             type="button"
             className="book"
             data-edit={editing}
-            style={{ aspectRatio: `1 / ${ratio}`, viewTransitionName: `book-${book.id}` }}
+            style={{ aspectRatio: `1 / ${ratio}` }}
             onClick={() => (editing ? undefined : onOpen(book))}
             aria-label={`Apri ${book.title}`}
             title={book.author ? `${book.title} — ${book.author}` : book.title}

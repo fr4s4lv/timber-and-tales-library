@@ -38,7 +38,7 @@ type FoliateViewEl = HTMLElement & {
   renderer: HTMLElement & { setStyles?: (s: string) => void; next: () => void };
   lastLocation?: { range?: Range };
   open: (f: File) => Promise<void>;
-  init: (o: { lastLocation?: string; showTextStart?: boolean }) => Promise<void>;
+  init: (o: { lastLocation?: string | undefined; showTextStart?: boolean }) => Promise<void>;
   close: () => void;
   goTo: (t: string | number) => Promise<unknown>;
   goToFraction: (f: number) => Promise<void>;
@@ -115,7 +115,7 @@ export default function FoliateView(props: EngineProps) {
             cfi: start,
             label: d.tocItem?.label?.trim(),
             tocTarget: d.tocItem?.href,
-            contains: (bm) => {
+            contains: (bm: { cfi?: string | undefined }) => {
               if (!bm.cfi || !start || !end) return false;
               try {
                 return CFI.compare(bm.cfi, start) >= 0 && CFI.compare(bm.cfi, end) <= 0;

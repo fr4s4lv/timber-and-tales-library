@@ -148,7 +148,7 @@ export function StylePanel({ open, onOpenChange, device }: Props) {
                       max={r.max}
                       step={1}
                       value={[value]}
-                      onValueChange={([n]) => setPerShelf(d, n)}
+                      onValueChange={([n]) => setPerShelf(d, n ?? value)}
                       aria-label={d === "phone" ? "Libri per scaffale su iPhone" : "Libri per scaffale su iPad"}
                     />
                     <div className="mt-1 flex justify-between text-[10px] text-muted-foreground">

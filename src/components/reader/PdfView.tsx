@@ -67,7 +67,7 @@ function LazyPage({
   const [visible, setVisible] = useState(false);
   useEffect(() => {
     const el = wrap.current!;
-    const io = new IntersectionObserver(([e]) => setVisible(e.isIntersecting), { rootMargin: "900px 0px" });
+    const io = new IntersectionObserver(([e]) => setVisible(!!e?.isIntersecting), { rootMargin: "900px 0px" });
     io.observe(el);
     return () => io.disconnect();
   }, []);
@@ -236,7 +236,7 @@ export default function PdfView(props: EngineProps) {
         const pages = sc.querySelectorAll<HTMLElement>("[data-page]");
         for (const el of Array.from(pages)) {
           if (el.offsetTop + el.offsetHeight > mid) {
-            const n = Number(el.dataset.page);
+            const n = Number(el.dataset["page"]);
             if (n !== pageRef.current) setPage(n);
             break;
           }

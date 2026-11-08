@@ -6,19 +6,19 @@ export interface TocEntry {
   label: string;
   /** href / cfi for reflowable books, page number for PDF */
   target: string | number;
-  subitems?: TocEntry[];
+  subitems?: TocEntry[] | undefined;
 }
 
 export interface Location {
   fraction: number;
-  label?: string;
-  cfi?: string;
-  page?: number;
-  totalPages?: number;
-  excerpt?: string;
-  tocTarget?: string | number;
+  label?: string | undefined;
+  cfi?: string | undefined;
+  page?: number | undefined;
+  totalPages?: number | undefined;
+  excerpt?: string | undefined;
+  tocTarget?: string | number | undefined;
   /** whether a stored bookmark position falls on the visible page */
-  contains: (bm: { cfi?: string; page?: number }) => boolean;
+  contains: (bm: { cfi?: string | undefined; page?: number | undefined }) => boolean;
 }
 
 export interface ReaderHandle {
@@ -32,7 +32,7 @@ export interface ReaderHandle {
 export interface EngineReady {
   toc: TocEntry[];
   fixedLayout: boolean;
-  totalPages?: number;
+  totalPages?: number | undefined;
 }
 
 export type TapZone = "left" | "center" | "right";
@@ -40,7 +40,7 @@ export type TapZone = "left" | "center" | "right";
 export interface EngineProps {
   blob: Blob;
   fileName: string;
-  initial?: { cfi?: string; page?: number; fraction?: number };
+  initial?: { cfi?: string | undefined; page?: number; fraction?: number };
   prefs: ReaderPrefs;
   onReady: (r: EngineReady) => void;
   onRelocate: (l: Location) => void;

@@ -35,7 +35,7 @@ function ClassicCrown({ variant, title }: { variant: Variant; title: string }) {
   );
 }
 
-function ClassicColumn({ texture }: { texture?: string }) {
+function ClassicColumn({ texture }: { texture?: string | undefined }) {
   return (
     <div className="col">
       <IonicCapital texture={texture} />

@@ -38,7 +38,7 @@ async function epubHasDrm(file: Blob): Promise<boolean> {
   if (entries["META-INF/rights.xml"]) return true;
   const enc = entries["META-INF/encryption.xml"];
   if (!enc) return false;
-  const algos = Array.from(enc.matchAll(/Algorithm="([^"]+)"/g)).map((m) => m[1]);
+  const algos = Array.from(enc.matchAll(/Algorithm="([^"]+)"/g)).map((m) => m[1] ?? "");
   return algos.some((a) => !FONT_OBFUSCATION.has(a));
 }
 

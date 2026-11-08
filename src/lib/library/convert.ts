@@ -103,7 +103,8 @@ function markdownToHtml(md: string): string {
     if (h) {
       flush();
       closeList();
-      html += `<h${h[1].length}>${inlineMd(h[2])}</h${h[1].length}>`;
+      const lvl = (h[1] ?? "#").length;
+      html += `<h${lvl}>${inlineMd(h[2] ?? "")}</h${lvl}>`;
     } else if (ul || ol) {
       flush();
       const kind = ul ? "ul" : "ol";
@@ -112,11 +113,11 @@ function markdownToHtml(md: string): string {
         html += `<${kind}>`;
         list = kind;
       }
-      html += `<li>${inlineMd((ul ?? ol)![1])}</li>`;
+      html += `<li>${inlineMd((ul ?? ol)![1] ?? "")}</li>`;
     } else if (quote) {
       flush();
       closeList();
-      html += `<blockquote><p>${inlineMd(quote[1])}</p></blockquote>`;
+      html += `<blockquote><p>${inlineMd(quote[1] ?? "")}</p></blockquote>`;
     } else if (/^\s*(---|\*\*\*)\s*$/.test(line)) {
       flush();
       closeList();
@@ -196,7 +197,7 @@ function rtfToText(rtf: string): string {
       }
       const m = /^([a-zA-Z]+)(-?\d+)? ?/.exec(rtf.slice(i + 1, i + 40));
       if (m) {
-        const word = m[1];
+        const word = m[1] ?? "";
         i += m[0].length;
         if (DESTS.test(word)) skipAt.push(depth);
         else if (!skipping) {

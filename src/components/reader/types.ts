@@ -40,7 +40,7 @@ export type TapZone = "left" | "center" | "right";
 export interface EngineProps {
   blob: Blob;
   fileName: string;
-  initial?: { cfi?: string | undefined; page?: number; fraction?: number };
+  initial?: { cfi?: string | undefined; page?: number | undefined; fraction?: number | undefined } | undefined;
   prefs: ReaderPrefs;
   onReady: (r: EngineReady) => void;
   onRelocate: (l: Location) => void;

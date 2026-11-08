@@ -80,7 +80,7 @@ export function LibraryScreen() {
 
   const runImport = useCallback(async (files: File[]) => {
     if (!files.length) return;
-    const id = toast.loading(files.length === 1 ? `Importo ${files[0].name}…` : `Importo ${files.length} file…`);
+    const id = toast.loading(files.length === 1 ? `Importo ${files[0]?.name ?? "file"}…` : `Importo ${files.length} file…`);
     const { importFiles } = await import("@/lib/library/import");
     const res = await importFiles(files, (done, total, name) => {
       if (total > 1 && name) toast.loading(`Importo ${done + 1} di ${total}: ${name}`, { id });
@@ -89,7 +89,7 @@ export function LibraryScreen() {
     if (res.imported.length) {
       toast.success(
         res.imported.length === 1
-          ? `«${res.imported[0].title}» è sullo scaffale`
+          ? `«${res.imported[0]?.title}» è sullo scaffale`
           : `${res.imported.length} libri aggiunti alla libreria`,
       );
     }

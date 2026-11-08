@@ -40,7 +40,7 @@ function textToChapters(text: string, fallbackTitle: string): Chapter[] {
   const chapters: Chapter[] = [];
   let cur: Chapter | null = null;
   for (const block of blocks) {
-    const firstLine = block.split("\n")[0];
+    const firstLine = block.split("\n")[0] ?? "";
     if (HEADING_RE.test(firstLine) && firstLine.length < 90) {
       cur = { title: firstLine.trim(), html: `<h2>${esc(firstLine.trim())}</h2>` };
       chapters.push(cur);

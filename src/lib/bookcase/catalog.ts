@@ -115,17 +115,17 @@ export const STYLES: StyleDef[] = [
 ];
 
 export function getStyle(id: ShelfStyle): StyleDef {
-  return STYLES.find((s) => s.id === id) ?? STYLES[0];
+  return STYLES.find((s) => s.id === id) ?? STYLES[0]!;
 }
 
 export function getVariant(style: ShelfStyle, variantId: string | undefined): Variant {
   const s = getStyle(style);
-  return s.variants.find((v) => v.id === variantId) ?? s.variants[0];
+  return s.variants.find((v) => v.id === variantId) ?? s.variants[0]!;
 }
 
 export function getFinish(style: ShelfStyle, finishId: string | undefined): Finish {
   const s = getStyle(style);
-  return s.finishes.find((f) => f.id === finishId) ?? s.finishes[0];
+  return s.finishes.find((f) => f.id === finishId) ?? s.finishes[0]!;
 }
 
 export function finishCssVars(finish: Finish): Record<string, string> {

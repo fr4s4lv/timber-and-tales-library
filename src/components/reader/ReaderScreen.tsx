@@ -211,8 +211,8 @@ export function ReaderScreen({ bookId }: { bookId: string }) {
             max={sliderMax}
             step={1}
             value={[sliderValue]}
-            onValueChange={([v]) => setScrub(v)}
-            onValueCommit={([v]) => {
+            onValueChange={([v]) => setScrub(v ?? null)}
+            onValueCommit={([v = 0]) => {
               setScrub(null);
               if (loc?.totalPages) handle.current?.goTo(v);
               else handle.current?.goToFraction(v / 1000);

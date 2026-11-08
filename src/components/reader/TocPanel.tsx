@@ -12,7 +12,7 @@ interface Props {
   onTabChange: (t: "toc" | "bookmarks") => void;
   title: string;
   toc: TocEntry[];
-  current?: string | number;
+  current?: string | number | undefined;
   bookmarks: Bookmark[];
   onSelect: (target: string | number) => void;
   onSelectBookmark: (b: Bookmark) => void;
@@ -27,7 +27,7 @@ function TocList({
 }: {
   items: TocEntry[];
   depth: number;
-  current?: string | number;
+  current?: string | number | undefined;
   onSelect: (t: string | number) => void;
 }) {
   return (

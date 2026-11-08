@@ -15,7 +15,7 @@ function spiralPath(cx: number, cy: number, r0: number, turns: number, mirror: b
   return pts.join(" ");
 }
 
-export function IonicCapital({ texture }: { texture?: string }) {
+export function IonicCapital({ texture }: { texture?: string | undefined }) {
   const raw = useId();
   const id = raw.replace(/[^a-zA-Z0-9_-]/g, "");
   const tex = `tex${id}`;

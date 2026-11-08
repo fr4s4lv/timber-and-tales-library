@@ -4,17 +4,17 @@ export interface Bookmark {
   id: string;
   createdAt: number;
   label: string;
-  excerpt?: string;
+  excerpt?: string | undefined;
   fraction: number;
-  cfi?: string;
-  page?: number;
+  cfi?: string | undefined;
+  page?: number | undefined;
 }
 
 export interface ReadingProgress {
   fraction: number;
-  cfi?: string;
-  page?: number;
-  label?: string;
+  cfi?: string | undefined;
+  page?: number | undefined;
+  label?: string | undefined;
 }
 
 export interface BookMeta {
@@ -28,10 +28,10 @@ export interface BookMeta {
   originalName: string;
   size: number;
   addedAt: number;
-  lastOpenedAt?: number;
+  lastOpenedAt?: number | undefined;
   favorite: boolean;
   hasCover: boolean;
-  coverRatio?: number; // height / width
-  progress?: ReadingProgress;
+  coverRatio?: number | undefined; // height / width
+  progress?: ReadingProgress | undefined;
   bookmarks: Bookmark[];
 }

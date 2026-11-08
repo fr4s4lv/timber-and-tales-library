@@ -42,7 +42,6 @@ export function ReaderSettings({ prefs, fixedLayout }: { prefs: ReaderPrefs; fix
             <button
               key={id}
               type="button"
-              disabled={fixedLayout && id === "scrolled" && !prefs.flow}
               onClick={() => updateReader({ flow: id })}
               className={cn(
                 "flex items-center justify-center gap-2 rounded-lg border py-2.5 text-sm font-semibold transition",

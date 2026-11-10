@@ -207,10 +207,12 @@
 }
 
 .bc-interior {
-  position: relative;
-  flex: 1;
-  min-width: 0;
+  /* fills its column and scrolls; must stay absolute (unlayered CSS beats utilities) */
+  position: absolute;
+  inset: 0;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
   background-color: var(--wood-color);

@@ -132,7 +132,9 @@ async function importOne(file: File): Promise<BookMeta> {
       throw new Error("Il file sembra danneggiato o non è un ebook valido.");
     }
     if (!book.sections?.length) throw new Error("Il libro non contiene pagine leggibili.");
-    title = langMap(book.metadata?.title) || baseTitle;
+    const metaTitle = langMap(book.metadata?.title).trim();
+    // comic archives report the (internal) file name as their title
+    title = metaTitle && metaTitle !== fileName && metaTitle !== file.name ? metaTitle : baseTitle;
     author = formatAuthor(book.metadata?.author);
     cover = await normalizeCover(await Promise.resolve(book.getCover?.()).catch(() => null));
   } else {
@@ -188,7 +190,8 @@ export async function importFiles(
     try {
       outcome.imported.push(await importOne(file));
     } catch (e) {
-      outcome.failed.push({ name: file.name, reason: (e as Error).message || "Errore sconosciuto" });
+      const reason = e instanceof Error && e.message ? e.message : t("import.unknownError");
+      outcome.failed.push({ name: file.name, reason });
     }
     done++;
   }

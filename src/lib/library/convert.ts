@@ -161,33 +161,64 @@ function htmlToChapters(html: string, fallbackTitle: string): { title: string; a
   return { title, author, chapters: nonEmpty.length ? nonEmpty : [{ title, html: "<p></p>" }] };
 }
 
+const RTF_SYMBOLS: Record<string, string> = {
+  emdash: "\u2014",
+  endash: "\u2013",
+  lquote: "\u2018",
+  rquote: "\u2019",
+  ldblquote: "\u201C",
+  rdblquote: "\u201D",
+  bullet: "\u2022",
+  emspace: "\u2003",
+  enspace: "\u2002",
+  qmspace: "\u2005",
+  "~": "\u00A0",
+};
+const CP1252 = new TextDecoder("windows-1252");
+
 function rtfToText(rtf: string): string {
   let out = "";
   let depth = 0;
   const skipAt: number[] = [];
-  const DESTS = /^(fonttbl|colortbl|stylesheet|info|pict|header|footer|footnote|object|themedata|datastore|latentstyles|listtable|listoverridetable|rsidtbl|generator|xmlnstbl|mmathPr)$/;
+  // \ucN: how many fallback characters follow each \uN (per group, default 1)
+  const ucStack: number[] = [1];
+  let pendingSkip = 0;
+  const DESTS =
+    /^(fonttbl|colortbl|stylesheet|info|pict|header|headerl|headerr|headerf|footer|footerl|footerr|footerf|footnote|object|themedata|datastore|latentstyles|listtable|listoverridetable|rsidtbl|generator|xmlnstbl|mmathPr|filetbl|revtbl|bkmkstart|bkmkend|fldinst|shppict|nonshppict)$/;
+  const emit = (s: string) => {
+    if (skipAt.length) return;
+    if (pendingSkip > 0) {
+      pendingSkip--;
+      return;
+    }
+    out += s;
+  };
   for (let i = 0; i < rtf.length; i++) {
     const c = rtf[i];
     if (c === "{") {
       depth++;
+      ucStack.push(ucStack[ucStack.length - 1] ?? 1);
+      pendingSkip = 0;
       continue;
     }
     if (c === "}") {
       if (skipAt.length && skipAt[skipAt.length - 1] === depth) skipAt.pop();
       depth--;
+      if (ucStack.length > 1) ucStack.pop();
+      pendingSkip = 0;
       continue;
     }
-    const skipping = skipAt.length > 0;
     if (c === "\\") {
       const next = rtf[i + 1];
       if (next === "\\" || next === "{" || next === "}") {
-        if (!skipping) out += next;
+        emit(next);
         i++;
         continue;
       }
       if (next === "'") {
-        if (!skipping) out += String.fromCharCode(parseInt(rtf.substr(i + 2, 2), 16));
+        const byte = parseInt(rtf.substr(i + 2, 2), 16);
         i += 3;
+        if (Number.isFinite(byte)) emit(CP1252.decode(new Uint8Array([byte])));
         continue;
       }
       if (next === "*") {
@@ -195,25 +226,42 @@ function rtfToText(rtf: string): string {
         i++;
         continue;
       }
+      if (next === "~" || next === "-" || next === "_") {
+        if (next === "~") emit("\u00A0");
+        else if (next === "_") emit("-");
+        i++;
+        continue;
+      }
+      if (next === "\n" || next === "\r") {
+        emit("\n\n");
+        i++;
+        continue;
+      }
       const m = /^([a-zA-Z]+)(-?\d+)? ?/.exec(rtf.slice(i + 1, i + 40));
       if (m) {
         const word = m[1] ?? "";
         i += m[0].length;
-        if (DESTS.test(word)) skipAt.push(depth);
-        else if (!skipping) {
-          if (word === "par" || word === "line") out += "\n\n";
-          else if (word === "tab") out += "\t";
-          else if (word === "u" && m[2]) {
-            const code = parseInt(m[2], 10);
-            out += String.fromCharCode(code < 0 ? code + 65536 : code);
-            if (rtf[i + 1] === "?") i++;
-          }
+        if (DESTS.test(word)) {
+          skipAt.push(depth);
+        } else if (word === "uc" && m[2]) {
+          ucStack[ucStack.length - 1] = Math.max(0, parseInt(m[2], 10));
+        } else if (word === "u" && m[2]) {
+          const code = parseInt(m[2], 10);
+          emit(String.fromCharCode(code < 0 ? code + 65536 : code));
+          if (!skipAt.length) pendingSkip = ucStack[ucStack.length - 1] ?? 1;
+        } else if (word === "par" || word === "line" || word === "sect" || word === "page") {
+          emit("\n\n");
+        } else if (word === "tab") {
+          emit("\t");
+        } else if (RTF_SYMBOLS[word]) {
+          emit(RTF_SYMBOLS[word]!);
         }
         continue;
       }
       continue;
     }
-    if (!skipping && c !== "\n" && c !== "\r") out += c;
+    if (c === "\n" || c === "\r") continue;
+    emit(c!);
   }
   return out;
 }

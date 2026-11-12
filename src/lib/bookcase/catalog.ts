@@ -8,14 +8,22 @@ import ciliegioV from "@/assets/wood-ciliegio.jpg";
 import ciliegioH from "@/assets/wood-ciliegio-h.jpg";
 import rovereV from "@/assets/wood-rovere.jpg";
 import rovereH from "@/assets/wood-rovere-h.jpg";
+import faggioV from "@/assets/wood-faggio.jpg";
+import faggioH from "@/assets/wood-faggio-h.jpg";
+import betullaV from "@/assets/wood-betulla.jpg";
+import betullaH from "@/assets/wood-betulla-h.jpg";
+import palissandroV from "@/assets/wood-palissandro.jpg";
+import palissandroH from "@/assets/wood-palissandro-h.jpg";
+import castagnoV from "@/assets/wood-castagno.jpg";
+import castagnoH from "@/assets/wood-castagno-h.jpg";
 import modernoV from "@/assets/wood-moderno.jpg";
 import modernoH from "@/assets/wood-moderno-h.jpg";
+import type { MessageKey } from "@/lib/i18n/it";
 
 export type ShelfStyle = "antico" | "classico" | "moderno";
 
 export interface Finish {
   id: string;
-  label: string;
   /** CSS colour token used under (or instead of) the grain */
   color: string;
   /** vertical / horizontal grain textures; absent for solid tints */
@@ -27,92 +35,73 @@ export interface Finish {
 
 export interface Variant {
   id: string;
-  label: string;
-  description: string;
   gilt?: boolean;
 }
 
 export interface StyleDef {
   id: ShelfStyle;
-  label: string;
-  description: string;
   variants: Variant[];
   finishes: Finish[];
 }
 
+const wood = (id: string, texV: string, texH: string, tone: Finish["tone"] = "dark"): Finish => ({
+  id,
+  color: `var(--wood-${id})`,
+  texV,
+  texH,
+  tone,
+});
+
 const WOODS: Finish[] = [
-  { id: "noce", label: "Noce", color: "var(--wood-noce)", texV: noceV, texH: noceH, tone: "dark" },
-  { id: "wenge", label: "Wengé", color: "var(--wood-wenge)", texV: wengeV, texH: wengeH, tone: "dark" },
-  {
-    id: "mogano",
-    label: "Mogano rosso",
-    color: "var(--wood-mogano)",
-    texV: moganoV,
-    texH: moganoH,
-    tone: "dark",
-  },
-  {
-    id: "ciliegio",
-    label: "Ciliegio",
-    color: "var(--wood-ciliegio)",
-    texV: ciliegioV,
-    texH: ciliegioH,
-    tone: "dark",
-  },
-  { id: "rovere", label: "Rovere", color: "var(--wood-rovere)", texV: rovereV, texH: rovereH, tone: "dark" },
+  wood("noce", noceV, noceH),
+  wood("wenge", wengeV, wengeH),
+  wood("mogano", moganoV, moganoH),
+  wood("ciliegio", ciliegioV, ciliegioH),
+  wood("rovere", rovereV, rovereH),
+  wood("faggio", faggioV, faggioH),
+  wood("betulla", betullaV, betullaH, "light"),
+  wood("palissandro", palissandroV, palissandroH),
+  wood("castagno", castagnoV, castagnoH),
 ];
 
 const MODERN_FINISHES: Finish[] = [
-  { id: "tortora", label: "Tortora", color: "var(--tint-tortora)", tone: "light" },
-  { id: "bianco", label: "Bianco", color: "var(--tint-bianco)", tone: "light" },
-  { id: "grigio-chiaro", label: "Grigio chiaro", color: "var(--tint-grigio-chiaro)", tone: "light" },
-  { id: "grigio-scuro", label: "Grigio scuro", color: "var(--tint-grigio-scuro)", tone: "dark" },
-  { id: "ocra", label: "Ocra", color: "var(--tint-ocra)", tone: "light" },
-  {
-    id: "legno-moderno",
-    label: "Legno moderno",
-    color: "var(--wood-moderno)",
-    texV: modernoV,
-    texH: modernoH,
-    tone: "light",
-  },
+  { id: "tortora", color: "var(--tint-tortora)", tone: "light" },
+  { id: "bianco", color: "var(--tint-bianco)", tone: "light" },
+  { id: "grigio-chiaro", color: "var(--tint-grigio-chiaro)", tone: "light" },
+  { id: "grigio-scuro", color: "var(--tint-grigio-scuro)", tone: "dark" },
+  { id: "ocra", color: "var(--tint-ocra)", tone: "light" },
+  { ...wood("moderno", modernoV, modernoH, "light"), id: "legno-moderno" },
 ];
 
 export const STYLES: StyleDef[] = [
   {
     id: "classico",
-    label: "Classico",
-    description: "Colonne scanalate con capitelli ionici e architrave",
     variants: [
-      { id: "ionico", label: "Ionico", description: "Architrave, fregio e cornice a dentelli" },
-      { id: "frontone", label: "Con frontone", description: "Timpano triangolare sopra la cornice" },
-      { id: "dorato", label: "Ionico dorato", description: "Volute e modanature in foglia d'oro", gilt: true },
+      { id: "ionico" },
+      { id: "dorato", gilt: true },
+      { id: "rinascimentale" },
+      { id: "barocco", gilt: true },
+      { id: "liberty" },
     ],
     finishes: WOODS,
   },
   {
     id: "antico",
-    label: "Antico",
-    description: "Biblioteca d'epoca con intagli e fregi",
-    variants: [
-      { id: "biblioteca", label: "Biblioteca", description: "Lesene a pannello e fregio a rosette" },
-      { id: "tortile", label: "Colonne tortili", description: "Colonne a tortiglione e cimasa ad arco" },
-      { id: "intarsiato", label: "Intarsiato", description: "Ovoli e filetti dorati", gilt: true },
-    ],
+    variants: [{ id: "biblioteca" }, { id: "tortile" }, { id: "intarsiato", gilt: true }],
     finishes: WOODS,
   },
   {
     id: "moderno",
-    label: "Moderno",
-    description: "Linee pulite e tinte unite",
-    variants: [
-      { id: "cornice", label: "Con cornice", description: "Struttura a giorno con telaio pieno" },
-      { id: "minimal", label: "Minimal", description: "Ripiani sottili, fianchi leggeri" },
-      { id: "sospese", label: "Mensole sospese", description: "Mensole a muro senza struttura" },
-    ],
+    variants: [{ id: "cornice" }, { id: "minimal" }, { id: "sospese" }, { id: "scandinavo" }, { id: "industriale" }],
     finishes: MODERN_FINISHES,
   },
 ];
+
+export const styleLabelKey = (id: ShelfStyle) => `style.${id}` as MessageKey;
+export const styleDescKey = (id: ShelfStyle) => `style.${id}.desc` as MessageKey;
+export const variantLabelKey = (id: string) => `variant.${id}` as MessageKey;
+export const variantDescKey = (id: string) => `variant.${id}.desc` as MessageKey;
+export const finishLabelKey = (id: string) => `finish.${id}` as MessageKey;
 
 export function getStyle(id: ShelfStyle): StyleDef {
   return STYLES.find((s) => s.id === id) ?? STYLES[0]!;

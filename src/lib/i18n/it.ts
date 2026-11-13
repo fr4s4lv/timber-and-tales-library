@@ -233,8 +233,6 @@ export const it = {
   "import.pages": "I file Pages vanno esportati in EPUB o PDF prima di importarli.",
   "import.ibooks": "I file .ibooks di Apple non sono leggibili fuori da Apple Books.",
   "import.acsm": "Il file .acsm è solo un buono d'acquisto Adobe con DRM: non contiene il libro.",
-  "format.text": "Testo",
-  "format.comic": "Fumetto CBZ",
   "convert.part": "Parte {n}",
   "convert.contents": "Indice",
 } as const;

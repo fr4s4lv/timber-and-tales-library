@@ -100,6 +100,12 @@
   --wood-ciliegio: oklch(0.6 0.14 50);
   --wood-rovere: oklch(0.66 0.07 70);
   --wood-moderno: oklch(0.86 0.04 80);
+  --wood-faggio: oklch(0.74 0.06 60);
+  --wood-betulla: oklch(0.9 0.045 85);
+  --wood-palissandro: oklch(0.32 0.05 20);
+  --wood-castagno: oklch(0.6 0.11 65);
+  --steel: oklch(0.3 0.008 250);
+  --steel-light: oklch(0.55 0.01 250);
 
   /* modern solid tints */
   --tint-tortora: oklch(0.7 0.025 70);
@@ -123,6 +129,22 @@
   --reader-night-bg: oklch(0.16 0.005 260);
   --reader-night-fg: oklch(0.82 0.01 85);
   --reader-link: oklch(0.5 0.12 35);
+
+  /* reading papers (used by the "paper" reader theme) */
+  --paper-bianca-bg: oklch(0.985 0.006 90);
+  --paper-bianca-fg: oklch(0.22 0.01 60);
+  --paper-avorio-bg: oklch(0.955 0.028 88);
+  --paper-avorio-fg: oklch(0.24 0.02 60);
+  --paper-pergamena-bg: oklch(0.9 0.045 82);
+  --paper-pergamena-fg: oklch(0.26 0.045 50);
+  --paper-antica-bg: oklch(0.91 0.045 85);
+  --paper-antica-fg: oklch(0.27 0.04 50);
+  --paper-papiro-bg: oklch(0.85 0.07 80);
+  --paper-papiro-fg: oklch(0.23 0.05 50);
+  --paper-riso-bg: oklch(0.94 0.008 85);
+  --paper-riso-fg: oklch(0.22 0.01 60);
+  --paper-cotone-bg: oklch(0.95 0.004 90);
+  --paper-cotone-fg: oklch(0.2 0.008 60);
 
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -618,54 +640,6 @@
 .crown-shadow {
   box-shadow: 0 8px 14px -4px oklch(0.05 0.02 50 / 0.65);
 }
-.pediment {
-  position: relative;
-  height: var(--ped-h, 46px);
-  margin-inline: 2%;
-  clip-path: polygon(50% 0, 100% 100%, 0 100%);
-  background-color: var(--wood-color);
-  background-image:
-    linear-gradient(to bottom, oklch(1 0 0 / 0.2), oklch(0.05 0.02 50 / 0.25)),
-    var(--wood-h);
-  background-size:
-    100% 100%,
-    var(--tex) var(--tex);
-}
-.pediment::before {
-  content: "";
-  position: absolute;
-  inset: 22% 9% 0;
-  clip-path: polygon(50% 0, 100% 100%, 0 100%);
-  background-color: var(--wood-color);
-  background-image:
-    linear-gradient(to bottom, oklch(0.05 0.02 50 / 0.5), oklch(0.05 0.02 50 / 0.2)),
-    var(--wood-v);
-  background-size:
-    100% 100%,
-    var(--tex) var(--tex);
-}
-.pediment::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: 18%;
-  width: calc(var(--ped-h, 46px) * 0.42);
-  aspect-ratio: 1;
-  transform: translateX(-50%);
-  border-radius: 999px;
-  background: radial-gradient(
-    circle at 40% 35%,
-    var(--trim-light),
-    var(--trim) 60%,
-    oklch(0.05 0.02 50 / 0.6)
-  );
-}
-@media (min-width: 640px) {
-  .pediment {
-    --ped-h: 84px;
-  }
-}
-
 /* ------------------------------------------------------------------ */
 /* Antique: carved pilasters, barley-twist, egg & dart                 */
 /* ------------------------------------------------------------------ */
@@ -893,6 +867,304 @@
     var(--tex) var(--tex);
 }
 
+/* ------------------------------------------------------------------ */
+/* Classic: Renaissance, Baroque, Liberty                              */
+/* ------------------------------------------------------------------ */
+.wood-h-fill {
+  background-color: var(--wood-color);
+  background-image:
+    linear-gradient(to bottom, oklch(1 0 0 / 0.2), oklch(0.05 0.02 50 / 0.3)),
+    var(--wood-h);
+  background-size:
+    100% 100%,
+    var(--tex) var(--tex);
+}
+/* segmental pediment (Renaissance) */
+.lunette {
+  position: relative;
+  margin-inline: 6%;
+  height: var(--lun-h, 30px);
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  box-shadow:
+    inset 0 2px 0 var(--trim-light),
+    inset 0 5px 0 color-mix(in oklab, var(--wood-color) 70%, var(--shade));
+}
+.lunette::before {
+  content: "";
+  position: absolute;
+  inset: 26% 12% 0;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  background-color: var(--wood-color);
+  background-image:
+    linear-gradient(to bottom, oklch(0.05 0.02 50 / 0.45), oklch(0.05 0.02 50 / 0.15)),
+    var(--wood-v);
+  background-size:
+    100% 100%,
+    var(--tex) var(--tex);
+  box-shadow: inset 0 2px 3px oklch(0.05 0.02 50 / 0.6);
+}
+.lunette::after {
+  /* shell / tondo in the tympanum */
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 8%;
+  height: 62%;
+  aspect-ratio: 1.6;
+  transform: translateX(-50%);
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  background: repeating-conic-gradient(
+    from -90deg at 50% 100%,
+    var(--trim-light) 0 6deg,
+    color-mix(in oklab, var(--wood-color) 65%, var(--shade)) 6deg 12deg
+  );
+  mask: linear-gradient(#000, #000);
+  opacity: 0.9;
+}
+@media (min-width: 640px) {
+  .lunette {
+    --lun-h: 58px;
+  }
+}
+.col-candelabra {
+  flex: 1;
+  width: 82%;
+  position: relative;
+  background-color: var(--wood-color);
+  background-image:
+    linear-gradient(
+      90deg,
+      oklch(0.05 0.02 50 / 0.5),
+      oklch(1 0 0 / 0.12) 20%,
+      oklch(0.05 0.02 50 / 0.05) 50%,
+      oklch(0.05 0.02 50 / 0.5)
+    ),
+    var(--wood-v);
+  background-size:
+    100% 100%,
+    var(--tex) var(--tex);
+}
+.col-candelabra::before {
+  /* sunk panel with a candelabra arabesque running down it */
+  content: "";
+  position: absolute;
+  inset: 8px 20%;
+  border-radius: 999px 999px 2px 2px;
+  background-image:
+    radial-gradient(ellipse 50% 9px at 50% 50%, var(--trim-light) 0 30%, transparent 34%),
+    radial-gradient(circle 3px at 50% 50%, var(--trim) 0 90%, transparent),
+    linear-gradient(90deg, transparent 46%, var(--trim) 46% 54%, transparent 54%),
+    linear-gradient(90deg, oklch(0.05 0.02 50 / 0.4), oklch(0.05 0.02 50 / 0.15));
+  background-size:
+    100% 34px,
+    100% 17px,
+    100% 100%,
+    100% 100%;
+  box-shadow:
+    inset 2px 2px 3px oklch(0.05 0.02 50 / 0.7),
+    inset -1px -1px 1px oklch(1 0 0 / 0.25);
+}
+/* Baroque crest: broken scroll pediment with a cartouche */
+.baroque-crest {
+  position: relative;
+  height: var(--bq-h, 40px);
+  margin-inline: 4%;
+}
+.baroque-crest > span {
+  position: absolute;
+  bottom: 0;
+  width: 34%;
+  height: 100%;
+  border-top: var(--bq-w, 6px) solid var(--wood-color);
+  border-image: none;
+  filter: drop-shadow(0 3px 2px oklch(0.05 0.02 50 / 0.55));
+}
+.baroque-crest > .bq-left {
+  left: 6%;
+  border-radius: 100% 0 0 0 / 100% 0 0 0;
+  border-left: var(--bq-w, 6px) solid var(--wood-color);
+  box-shadow: inset 2px 2px 0 var(--trim-light);
+}
+.baroque-crest > .bq-right {
+  right: 6%;
+  border-radius: 0 100% 0 0 / 0 100% 0 0;
+  border-right: var(--bq-w, 6px) solid var(--wood-color);
+  box-shadow: inset -2px 2px 0 var(--trim-light);
+}
+.baroque-crest > .bq-left::after,
+.baroque-crest > .bq-right::after {
+  /* volute curl at the inner end */
+  content: "";
+  position: absolute;
+  top: calc(var(--bq-w, 6px) * -1.6);
+  width: calc(var(--bq-h, 40px) * 0.42);
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: radial-gradient(
+    circle at 50% 50%,
+    var(--trim) 0 18%,
+    var(--trim-light) 20% 34%,
+    var(--wood-color) 36% 52%,
+    var(--trim-light) 54% 64%,
+    color-mix(in oklab, var(--wood-color) 70%, var(--shade)) 66%
+  );
+}
+.baroque-crest > .bq-left::after {
+  right: calc(var(--bq-h, 40px) * -0.2);
+}
+.baroque-crest > .bq-right::after {
+  left: calc(var(--bq-h, 40px) * -0.2);
+}
+.baroque-crest > .bq-cartouche {
+  left: 50%;
+  width: calc(var(--bq-h, 40px) * 0.95);
+  height: 96%;
+  transform: translateX(-50%);
+  border: 0;
+  border-radius: 50% 50% 46% 46% / 60% 60% 40% 40%;
+  background:
+    radial-gradient(ellipse at 40% 32%, var(--trim-light), var(--trim) 55%, oklch(0.05 0.02 50 / 0.65)),
+    var(--wood-color);
+  box-shadow:
+    0 0 0 2px color-mix(in oklab, var(--wood-color) 60%, var(--shade)),
+    0 0 0 3.5px var(--trim-light);
+}
+@media (min-width: 640px) {
+  .baroque-crest {
+    --bq-h: 74px;
+    --bq-w: 10px;
+  }
+}
+.col-solomonic {
+  flex: 1;
+  width: 74%;
+  background-color: var(--wood-color);
+  background-image:
+    linear-gradient(
+      90deg,
+      oklch(0.05 0.02 50 / 0.7),
+      oklch(1 0 0 / 0.2) 36%,
+      oklch(0.05 0.02 50 / 0.1) 60%,
+      oklch(0.05 0.02 50 / 0.72)
+    ),
+    repeating-linear-gradient(
+      -32deg,
+      oklch(0.05 0.02 50 / 0.6) 0,
+      var(--trim-light) calc(var(--col-w) * 0.08),
+      oklch(1 0 0 / 0.12) calc(var(--col-w) * 0.24),
+      oklch(0.05 0.02 50 / 0.2) calc(var(--col-w) * 0.4),
+      oklch(0.05 0.02 50 / 0.6) calc(var(--col-w) * 0.52)
+    ),
+    var(--wood-v);
+  background-size:
+    100% 100%,
+    100% 100%,
+    var(--tex) var(--tex);
+}
+/* Liberty (Art Nouveau): whiplash arch, slender stems, tulip tops */
+.liberty-arch {
+  position: relative;
+  height: var(--lib-h, 34px);
+  margin-inline: 0;
+  background-color: var(--wood-color);
+  background-image:
+    linear-gradient(to bottom, oklch(1 0 0 / 0.18), oklch(0.05 0.02 50 / 0.3)),
+    var(--wood-h);
+  background-size:
+    100% 100%,
+    var(--tex) var(--tex);
+  /* a soft ogee: rises in the middle, dips near the ends */
+  clip-path: polygon(
+    0 100%, 0 70%, 6% 62%, 12% 66%, 20% 56%, 30% 38%, 40% 20%, 50% 0, 60% 20%, 70% 38%, 80% 56%, 88% 66%, 94% 62%,
+    100% 70%, 100% 100%
+  );
+}
+.liberty-arch::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(var(--trim-light), var(--trim-light)) bottom / 100% 1.5px no-repeat;
+}
+.liberty-flower {
+  position: absolute;
+  left: 50%;
+  bottom: 8%;
+  width: calc(var(--lib-h, 34px) * 0.9);
+  aspect-ratio: 1.4;
+  transform: translateX(-50%);
+  background:
+    radial-gradient(ellipse 14% 40% at 50% 46%, var(--trim-light) 0 70%, transparent 74%),
+    radial-gradient(ellipse 18% 32% at 32% 60%, color-mix(in oklab, var(--wood-color) 60%, var(--light)) 0 70%, transparent 74%),
+    radial-gradient(ellipse 18% 32% at 68% 60%, color-mix(in oklab, var(--wood-color) 60%, var(--light)) 0 70%, transparent 74%),
+    radial-gradient(ellipse 46% 10% at 50% 92%, var(--trim) 0 70%, transparent 74%);
+}
+@media (min-width: 640px) {
+  .liberty-arch {
+    --lib-h: 64px;
+  }
+}
+.col-liberty {
+  flex: 1;
+  width: 46%;
+  border-radius: 999px;
+  background-color: var(--wood-color);
+  background-image:
+    linear-gradient(90deg, oklch(0.05 0.02 50 / 0.6), oklch(1 0 0 / 0.22) 40%, oklch(0.05 0.02 50 / 0.55)),
+    var(--wood-v);
+  background-size:
+    100% 100%,
+    var(--tex) var(--tex);
+}
+.liberty-tulip {
+  width: 92%;
+  aspect-ratio: 0.9;
+  flex: none;
+  border-radius: 50% 50% 46% 46% / 30% 30% 70% 70%;
+  background:
+    linear-gradient(90deg, transparent 47%, oklch(0.05 0.02 50 / 0.45) 47% 53%, transparent 53%),
+    radial-gradient(ellipse at 40% 30%, color-mix(in oklab, var(--wood-color) 60%, var(--light)), var(--wood-color) 50%, oklch(0.05 0.02 50 / 0.6));
+  box-shadow: 0 3px 4px oklch(0.05 0.02 50 / 0.5);
+}
+.liberty-bracket {
+  position: absolute;
+  top: 0;
+  z-index: 7;
+  width: calc(var(--col-w) * 1.1);
+  height: calc(var(--col-w) * 1.5);
+  border-top: 3px solid var(--wood-color);
+  pointer-events: none;
+  filter: drop-shadow(0 3px 2px oklch(0.05 0.02 50 / 0.5));
+}
+.col[data-side="left"] .liberty-bracket {
+  left: 60%;
+  border-left: 3px solid var(--wood-color);
+  border-radius: 100% 0 0 0 / 100% 0 0 0;
+  transform: scaleX(-1) translateX(-60%);
+}
+.col[data-side="right"] .liberty-bracket {
+  right: 60%;
+  border-right: 3px solid var(--wood-color);
+  border-radius: 0 100% 0 0 / 0 100% 0 0;
+  transform: scaleX(-1) translateX(60%);
+}
+.liberty-apron {
+  position: relative;
+  height: var(--apron-h, 16px);
+  background-color: var(--wood-color);
+  background-image:
+    linear-gradient(to bottom, oklch(1 0 0 / 0.12), oklch(0.05 0.02 50 / 0.45)),
+    var(--wood-h);
+  background-size:
+    100% 100%,
+    var(--tex) var(--tex);
+  mask: radial-gradient(ellipse 38% 70% at 50% 100%, transparent 98%, #000 100%);
+}
+@media (min-width: 640px) {
+  .liberty-apron {
+    --apron-h: 26px;
+  }
+}
+
 /* modern frame */
 .mod-frame {
   background-color: var(--wood-color);
@@ -902,6 +1174,136 @@
   background-size:
     100% 100%,
     var(--tex) var(--tex);
+}
+
+.scandi-top {
+  border-radius: 16px 16px 0 0;
+}
+.bookcase[data-variant="scandinavo"] {
+  border-radius: 0;
+}
+.bookcase[data-variant="scandinavo"] .bc-plank-front {
+  border-radius: 0 0 5px 5px;
+}
+.scandi-base {
+  position: relative;
+  z-index: 8;
+  flex: none;
+  background: var(--wall);
+}
+.scandi-base > .mod-frame {
+  height: 14px;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 6px 10px -4px oklch(0.05 0.02 50 / 0.45);
+}
+.scandi-legs {
+  display: flex;
+  justify-content: space-between;
+  padding-inline: 7%;
+  height: var(--leg-h, 18px);
+}
+.scandi-legs > span {
+  width: 9px;
+  height: 100%;
+  border-radius: 0 0 4px 4px;
+  clip-path: polygon(0 0, 100% 0, 78% 100%, 22% 100%);
+}
+.scandi-legs > span:first-child {
+  transform: skewX(10deg);
+}
+.scandi-legs > span:last-child {
+  transform: skewX(-10deg);
+}
+@media (min-width: 640px) {
+  .scandi-legs {
+    --leg-h: 30px;
+  }
+  .scandi-legs > span {
+    width: 14px;
+  }
+  .scandi-base > .mod-frame {
+    height: 22px;
+  }
+}
+/* Industrial: blackened steel uprights over a bare wall */
+.steel {
+  background-color: var(--steel);
+  background-image: linear-gradient(
+    90deg,
+    oklch(0.1 0.005 250 / 0.6),
+    color-mix(in oklab, var(--steel-light) 70%, transparent) 35%,
+    oklch(0.1 0.005 250 / 0.2) 60%,
+    oklch(0.1 0.005 250 / 0.7)
+  );
+}
+.steel-post {
+  position: relative;
+  z-index: 6;
+  flex: none;
+  width: 10px;
+  background-image:
+    radial-gradient(circle 1.6px at 50% 50%, var(--steel-light) 0 60%, oklch(0.1 0.005 250) 70%, transparent 80%),
+    linear-gradient(
+      90deg,
+      oklch(0.1 0.005 250 / 0.6),
+      color-mix(in oklab, var(--steel-light) 70%, transparent) 35%,
+      oklch(0.1 0.005 250 / 0.2) 60%,
+      oklch(0.1 0.005 250 / 0.7)
+    );
+  background-size:
+    100% 46px,
+    100% 100%;
+  background-color: var(--steel);
+}
+@media (min-width: 640px) {
+  .steel-post {
+    width: 16px;
+  }
+}
+.steel-bar {
+  position: relative;
+  z-index: 8;
+  flex: none;
+  height: 10px;
+  background-color: var(--steel);
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in oklab, var(--steel-light) 70%, transparent),
+    oklch(0.1 0.005 250 / 0.7)
+  );
+  box-shadow: 0 6px 10px -4px oklch(0.05 0.02 50 / 0.5);
+}
+.bookcase[data-variant="industriale"] .bc-interior {
+  background-color: var(--wall);
+  background-image:
+    linear-gradient(
+      to top right,
+      transparent calc(50% - 1px),
+      color-mix(in oklab, var(--steel) 55%, transparent) calc(50% - 1px) calc(50% + 1px),
+      transparent calc(50% + 1px)
+    ),
+    linear-gradient(
+      to top left,
+      transparent calc(50% - 1px),
+      color-mix(in oklab, var(--steel) 55%, transparent) calc(50% - 1px) calc(50% + 1px),
+      transparent calc(50% + 1px)
+    ),
+    linear-gradient(to bottom, oklch(0.1 0.02 50 / 0.08), oklch(0.1 0.02 50 / 0.02) 30%, oklch(0.1 0.02 50 / 0.1));
+  background-size:
+    100% 100%,
+    100% 100%,
+    100% 100%;
+  background-attachment: scroll;
+}
+.bookcase[data-variant="industriale"] .bc-interior-shadow {
+  box-shadow: none;
+}
+.bookcase[data-variant="industriale"] .bc-plank {
+  margin-inline: 0;
+}
+.bookcase[data-variant="industriale"] .bc-plank-front {
+  border-bottom: 3px solid var(--steel);
+  box-shadow: 0 10px 14px -8px oklch(0.1 0.02 50 / 0.5);
 }
 
 /* ------------------------------------------------------------------ */
@@ -1022,10 +1424,18 @@
 /* Reader                                                              */
 /* ------------------------------------------------------------------ */
 .reader {
-  --r-bg: var(--reader-paper-bg);
-  --r-fg: var(--reader-paper-fg);
-  background: var(--r-bg);
+  --r-bg: var(--paper-bg, var(--reader-paper-bg));
+  --r-fg: var(--paper-fg, var(--reader-paper-fg));
+  background-color: var(--r-bg);
   color: var(--r-fg);
+}
+/* the page surface fills the whole screen, margins included */
+.reader-page {
+  background-color: var(--r-bg);
+}
+.reader[data-theme="paper"] .reader-page {
+  background-image: var(--paper-tex, none);
+  background-size: 512px 512px;
 }
 .reader[data-theme="sepia"] {
   --r-bg: var(--reader-sepia-bg);
@@ -1078,6 +1488,18 @@ foliate-view {
 }
 .reader[data-theme="sepia"] .pdf-page canvas {
   filter: sepia(0.35);
+}
+.reader[data-theme="paper"][data-textured="true"] .pdf-page {
+  background: transparent;
+}
+.reader[data-theme="paper"][data-textured="true"] .pdf-page canvas {
+  mix-blend-mode: multiply;
+}
+.paper-swatch {
+  background-color: var(--sw-bg);
+  background-image: var(--sw-tex, none);
+  background-size: 256px 256px;
+  color: var(--sw-fg);
 }
 .theme-dot {
   background: var(--dot-bg);

@@ -1,5 +1,6 @@
 // Browser-only import pipeline: detect → (convert) → read metadata & cover → store locally.
 import { unzip } from "fflate";
+import { t } from "@/lib/i18n";
 import { putBookFile, putCover } from "./db";
 import { detectFormat, storedFileName, type SupportedFormat } from "./formats";
 import { addBookMeta, getLibrarySnapshot, initLibrary } from "./store";
@@ -100,7 +101,7 @@ async function importOne(file: File): Promise<BookMeta> {
   const fmt = detectFormat(file.name);
   if (!fmt.supported) throw new Error(fmt.reason);
   const dup = getLibrarySnapshot().books.find((b) => b.originalName === file.name && b.size === file.size);
-  if (dup) throw new Error("È già nella tua libreria.");
+  if (dup) throw new Error(t("import.duplicate"));
 
   const id = crypto.randomUUID();
   const baseTitle = baseTitleOf(file.name);
@@ -119,19 +120,19 @@ async function importOne(file: File): Promise<BookMeta> {
     author = out.author;
   } else if (fmt.engine === "foliate") {
     if (["epub", "kepub", "kepub.epub", "epub3"].includes(fmt.ext) && (await epubHasDrm(file))) {
-      throw new Error("Questo EPUB è protetto da DRM (Adobe/Apple) e non può essere aperto.");
+      throw new Error(t("import.drmEpub"));
     }
     if (["mobi", "azw", "azw3", "prc", "kf8"].includes(fmt.ext) && (await mobiHasDrm(file))) {
-      throw new Error("Questo file Kindle è protetto da DRM e non può essere aperto.");
+      throw new Error(t("import.drmKindle"));
     }
     const { makeBook } = await import("foliate-js/view.js");
     let book: FoliateBook;
     try {
       book = await makeBook(new File([file], fileName, { type: file.type }));
     } catch {
-      throw new Error("Il file sembra danneggiato o non è un ebook valido.");
+      throw new Error(t("import.damaged"));
     }
-    if (!book.sections?.length) throw new Error("Il libro non contiene pagine leggibili.");
+    if (!book.sections?.length) throw new Error(t("import.noPages"));
     const metaTitle = langMap(book.metadata?.title).trim();
     // comic archives report the (internal) file name as their title
     title = metaTitle && metaTitle !== fileName && metaTitle !== file.name ? metaTitle : baseTitle;
@@ -144,8 +145,8 @@ async function importOne(file: File): Promise<BookMeta> {
       pdf = await openPdf(file);
     } catch (e) {
       const msg = String((e as Error)?.message ?? e);
-      if (/password/i.test(msg)) throw new Error("Questo PDF è protetto da password.");
-      throw new Error("Il PDF sembra danneggiato.");
+      if (/password/i.test(msg)) throw new Error(t("import.pdfPassword"));
+      throw new Error(t("import.pdfDamaged"));
     }
     const meta = await pdf.getMetadata().catch(() => null);
     const info = (meta?.info ?? {}) as { Title?: string; Author?: string };

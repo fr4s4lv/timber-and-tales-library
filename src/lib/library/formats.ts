@@ -1,3 +1,5 @@
+import { t } from "@/lib/i18n";
+import type { MessageKey } from "@/lib/i18n/it";
 export type Engine = "foliate" | "pdf" | "convert";
 export type ConvertKind = "txt" | "md" | "html" | "docx" | "rtf";
 
@@ -28,10 +30,10 @@ const TABLE: Record<string, Omit<SupportedFormat, "supported" | "ext">> = {
   fb2: { label: "FB2", engine: "foliate" },
   "fb2.zip": { label: "FB2", engine: "foliate" },
   fbz: { label: "FB2", engine: "foliate" },
-  cbz: { label: "Fumetto CBZ", engine: "foliate" },
+  cbz: { label: "CBZ", engine: "foliate" },
   pdf: { label: "PDF", engine: "pdf" },
-  txt: { label: "Testo", engine: "convert", convert: "txt" },
-  text: { label: "Testo", engine: "convert", convert: "txt" },
+  txt: { label: "TXT", engine: "convert", convert: "txt" },
+  text: { label: "TXT", engine: "convert", convert: "txt" },
   md: { label: "Markdown", engine: "convert", convert: "md" },
   markdown: { label: "Markdown", engine: "convert", convert: "md" },
   html: { label: "HTML", engine: "convert", convert: "html" },
@@ -41,18 +43,18 @@ const TABLE: Record<string, Omit<SupportedFormat, "supported" | "ext">> = {
   rtf: { label: "RTF", engine: "convert", convert: "rtf" },
 };
 
-const UNSUPPORTED: Record<string, string> = {
-  kfx: "I file Kindle KFX sono cifrati da Amazon e si leggono solo nelle app Kindle. Se il libro è senza DRM, convertilo in EPUB con Calibre.",
-  azw4: "Il formato Kindle Print Replica (AZW4) non è leggibile fuori da Kindle. Se è senza DRM, convertilo in PDF con Calibre.",
-  cbr: "Gli archivi fumetto RAR (CBR) non si possono aprire nel browser. Convertili in CBZ (ZIP) e reimportali.",
-  cb7: "Gli archivi fumetto 7z (CB7) non si possono aprire nel browser. Convertili in CBZ (ZIP) e reimportali.",
-  djvu: "Il formato DjVu non è supportato. Convertilo in PDF e reimportalo.",
-  lit: "Il vecchio formato Microsoft LIT non è supportato. Convertilo in EPUB con Calibre.",
-  lrf: "Il vecchio formato Sony LRF non è supportato. Convertilo in EPUB con Calibre.",
-  doc: "I vecchi file Word .doc non sono supportati: salvali come .docx o PDF.",
-  pages: "I file Pages vanno esportati in EPUB o PDF prima di importarli.",
-  ibooks: "I file .ibooks di Apple non sono leggibili fuori da Apple Books.",
-  acsm: "Il file .acsm è solo un buono d'acquisto Adobe con DRM: non contiene il libro.",
+const UNSUPPORTED: Record<string, MessageKey> = {
+  kfx: "import.kfx",
+  azw4: "import.azw4",
+  cbr: "import.cbr",
+  cb7: "import.cb7",
+  djvu: "import.djvu",
+  lit: "import.lit",
+  lrf: "import.lrf",
+  doc: "import.doc",
+  pages: "import.pages",
+  ibooks: "import.ibooks",
+  acsm: "import.acsm",
 };
 
 /** Ordered so that multi-part extensions win ("book.fb2.zip" → fb2.zip). */
@@ -69,14 +71,12 @@ export function detectFormat(fileName: string): FormatInfo {
   const ext = extensionOf(fileName);
   const known = TABLE[ext];
   if (known) return { supported: true, ext, ...known };
-  const reason = UNSUPPORTED[ext];
-  if (reason) return { supported: false, ext, reason };
+  const reasonKey = UNSUPPORTED[ext];
+  if (reasonKey) return { supported: false, ext, reason: t(reasonKey) };
   return {
     supported: false,
     ext,
-    reason: ext
-      ? `Il formato .${ext} non è un formato ebook riconosciuto.`
-      : "Il file non ha un'estensione: impossibile riconoscerne il formato.",
+    reason: ext ? t("import.unknownExt", { ext }) : t("import.noExt"),
   };
 }
 

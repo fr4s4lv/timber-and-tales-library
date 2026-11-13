@@ -1,6 +1,7 @@
 // Converts plain documents (TXT, Markdown, HTML, DOCX, RTF) into a small EPUB
 // so every format shares the same reader, table of contents and bookmarks.
 import { strToU8, zipSync, type Zippable } from "fflate";
+import { t } from "@/lib/i18n";
 import type { ConvertKind } from "./formats";
 
 interface Chapter {
@@ -60,7 +61,7 @@ function textToChapters(text: string, fallbackTitle: string): Chapter[] {
     for (let i = 0; i < blocks.length; i += 80) {
       const n = parts.length + 1;
       parts.push({
-        title: `Parte ${n}`,
+        title: t("convert.part", { n }),
         html: blocks
           .slice(i, i + 80)
           .map((b) => `<p>${esc(b.replace(/\n/g, " "))}</p>`)
@@ -287,7 +288,7 @@ function buildEpub({ title, author, chapters }: Converted, lang = "it"): Blob {
     navItems.push(`<li><a href="${href}">${esc(ch.title)}</a></li>`);
   });
   files["OEBPS/nav.xhtml"] = strToU8(
-    `<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"><head><title>Indice</title></head><body><nav epub:type="toc"><h1>Indice</h1><ol>${navItems.join("")}</ol></nav></body></html>`,
+    `<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"><head><title>${esc(t("convert.contents"))}</title></head><body><nav epub:type="toc"><h1>${esc(t("convert.contents"))}</h1><ol>${navItems.join("")}</ol></nav></body></html>`,
   );
   files["OEBPS/content.opf"] = strToU8(
     `<?xml version="1.0" encoding="UTF-8"?><package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="uid"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:identifier id="uid">${uid}</dc:identifier><dc:title>${esc(title)}</dc:title>${author ? `<dc:creator>${esc(author)}</dc:creator>` : ""}<dc:language>${lang}</dc:language><meta property="dcterms:modified">${new Date().toISOString().replace(/\.\d+Z$/, "Z")}</meta></metadata><manifest><item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/>${manifest.join("")}</manifest><spine>${spine.join("")}</spine></package>`,

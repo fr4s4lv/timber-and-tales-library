@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { BOOKS_PER_SHELF_RANGE, clampBooksPerShelf, deviceClassFor, toShelfRows } from "@/lib/bookcase/shelf";
-import { getStyle } from "@/lib/bookcase/catalog";
+import { finishLabelKey, getStyle } from "@/lib/bookcase/catalog";
+import { translate } from "@/lib/i18n";
 import { detectFormat } from "@/lib/library/formats";
 
 describe("books per shelf", () => {
@@ -26,13 +27,14 @@ describe("books per shelf", () => {
 
 describe("bookcase styles", () => {
   it("offers the requested woods for classic and antique", () => {
-    const woods = ["Noce", "Wengé", "Mogano rosso", "Ciliegio", "Rovere"];
-    expect(getStyle("classico").finishes.map((f) => f.label)).toEqual(woods);
-    expect(getStyle("antico").finishes.map((f) => f.label)).toEqual(woods);
+    const woods = ["Noce", "Wengé", "Mogano rosso", "Ciliegio", "Rovere", "Faggio", "Betulla", "Palissandro", "Castagno"];
+    const label = (id: string) => translate("it", finishLabelKey(id));
+    expect(getStyle("classico").finishes.map((f) => label(f.id))).toEqual(woods);
+    expect(getStyle("antico").finishes.map((f) => label(f.id))).toEqual(woods);
   });
 
   it("offers the requested tints for modern", () => {
-    expect(getStyle("moderno").finishes.map((f) => f.label)).toEqual([
+    expect(getStyle("moderno").finishes.map((f) => translate("it", finishLabelKey(f.id)))).toEqual([
       "Tortora",
       "Bianco",
       "Grigio chiaro",
@@ -40,6 +42,14 @@ describe("bookcase styles", () => {
       "Ocra",
       "Legno moderno",
     ]);
+  });
+});
+
+describe("classic variants", () => {
+  it("has Renaissance, Baroque and Liberty and no pediment variant", () => {
+    const ids = getStyle("classico").variants.map((v) => v.id);
+    expect(ids).toEqual(expect.arrayContaining(["rinascimentale", "barocco", "liberty"]));
+    expect(ids).not.toContain("frontone");
   });
 });
 

@@ -1,7 +1,7 @@
 import { ArrowDownToLine, ArrowRightToLine, Minus, Plus } from "lucide-react";
 import type { CSSProperties } from "react";
 import { Switch } from "@/components/ui/switch";
-import { updateReader, type ReaderFont, type ReaderTheme } from "@/lib/settings";
+import { updateReader, type ReaderTheme } from "@/lib/settings";
 import { cn } from "@/lib/utils";
 import type { ReaderPrefs } from "./types";
 
@@ -11,7 +11,7 @@ const THEMES: { id: ReaderTheme; label: string }[] = [
   { id: "gray", label: "Grigio" },
   { id: "night", label: "Notte" },
 ];
-const FONTS: { id: ReaderFont; label: string; className: string }[] = [
+const FONTS: { id: string; label: string; className: string }[] = [
   { id: "original", label: "Originale", className: "font-sans" },
   { id: "literata", label: "Literata", className: "font-reading" },
   { id: "cormorant", label: "Garamond", className: "font-display text-base" },
